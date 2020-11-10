@@ -1,0 +1,9 @@
+/node_modules/
+/logs/*
+ecosystem.json
+docs/
+config/production.*
+config/development.*
+.nyc_output/
+.DS_Store
+eslint.html

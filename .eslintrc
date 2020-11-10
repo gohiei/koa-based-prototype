@@ -1,0 +1,24 @@
+{
+    "env": {
+        "commonjs": true,
+        "es6": true,
+        "node": true,
+        "mocha": true
+    },
+    "extends": "airbnb-base",
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018
+    },
+    "rules": {
+        "class-methods-use-this": "off",
+        "no-unused-expressions": ["warn", { "allowShortCircuit": true }],
+        "no-bitwise": ["error", { "allow": ["&"], "int32Hint": true }],
+        "no-use-before-define": "off",
+        "no-return-await": "off",
+        "consistent-return": "off"
+    }
+}
