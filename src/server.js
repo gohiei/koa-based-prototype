@@ -12,6 +12,7 @@ function initialApp(config) {
   require('./lib/mysql')(app, config);
   require('./lib/redis')(app, config);
   require('./core/request')(app, config);
+  require('./lib/operation_logger')(app, config);
   require('./controller')(app, config);
 
   return app;

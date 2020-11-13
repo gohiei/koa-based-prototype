@@ -5,7 +5,7 @@ function UserController(router) {
    * User
    */
   router.put('/user', async (ctx) => {
-    const { request } = ctx.state;
+    const { request, operation_logger: operationLogger } = ctx.state;
     const domain = request.getInteger('domain');
     const username = request.getString('username');
     const enable = request.getBoolean('enable');
@@ -25,29 +25,40 @@ function UserController(router) {
       ctx.throw(400, { message: 'No user found', code: '100001' });
     }
 
-    if (request.has('enable')) {
+    const opLog = operationLogger('user', user.id);
+
+    if (request.has('enable') && user.enable !== enable) {
+      opLog.addMessage('enable', !!enable);
       user.enable = !!enable;
     }
 
-    if (request.has('bankrupt')) {
+    if (request.has('bankrupt') && user.bankrupt !== bankrupt) {
+      opLog.addMessage('bankrupt', !!bankrupt);
       user.bankrupt = !!bankrupt;
     }
 
-    if (request.has('locked')) {
+    if (request.has('locked') && user.locked !== locked) {
+      opLog.addMessage('locked', !!locked);
       user.locked = !!locked;
     }
 
-    if (request.has('tied')) {
+    if (request.has('tied') && user.tied !== tied) {
+      opLog.addMessage('tied', !!tied);
+
       user.tied = !!tied;
       user.tiedAt = tied ? DateTime.local().toString() : null;
     }
 
-    if (request.has('last_login')) {
+    if (request.has('last_login') && user.lastLogin.valueOf() !== lastLogin.valueOf()) {
+      opLog.addMessage('last_login', lastLogin);
       user.lastLogin = lastLogin;
-      console.log(lastLogin);
     }
 
     await user.save();
+
+    if (opLog.hasMessage()) {
+      opLog.save();
+    }
 
     ctx.body = {
       result: 'ok',

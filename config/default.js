@@ -13,6 +13,8 @@ module.exports = {
     // host: '0.0.0.0'
     // path: '/tmp/backend.sock'
   },
+  // @see https://github.com/axios/axios#request-config
+  api_gateway: null,
   redis: {
     default: {
       ioredis: null,

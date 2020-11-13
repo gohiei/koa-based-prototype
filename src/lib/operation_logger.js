@@ -1,6 +1,29 @@
 const os = require('os');
+const { DateTime } = require('luxon');
+const axios = require('axios');
 
-function OperationLog(ctx) {
+/**
+ * @typedef {object} OperationLog
+ * @property {function} addMessage 新增異動內容
+ * @property {function} getMessage 取得異動內容
+ * @property {function} hasMessage 是否有異動內容
+ * @property {function} save 執行儲存
+ */
+
+/**
+ * @typedef {import('koa').Context} KoaContext
+ */
+
+/**
+ * @type {OperationLog}
+ * @param {KoaContext} ctx
+ * @param {object} gatewayConfig
+ */
+function OperationLog(ctx, gatewayConfig) {
+  const request = gatewayConfig
+    ? axios.create(gatewayConfig)
+    : console.log;
+
   return function Log(tableName, majorKey) {
     const {
       url,
@@ -23,23 +46,111 @@ function OperationLog(ctx) {
       ? majorKey
       : Object.keys(majorKey).map((key) => `@${key}:${majorKey[key]}`).join(', ');
 
+    /**
+     * 新增異動內容
+     *
+     * @param {string} field 欄位名稱
+     * @param {any} oldValue 舊資料
+     * @param {any} [newValue] 新資料
+     * @return {OperationLog}
+     */
     function addMessage(field, ...values) {
       let [oldValue, newValue = null] = values;
 
       if (typeof oldValue === 'boolean') {
         oldValue = oldValue.toString();
       }
+
+      if (typeof newValue === 'boolean') {
+        newValue = newValue.toString();
+      }
+
+      if (oldValue instanceof DateTime) {
+        oldValue = oldValue.toString();
+      }
+
+      if (newValue instanceof DateTime) {
+        newValue = newValue.toString();
+      }
+
+      if (typeof oldValue === 'object') {
+        oldValue = JSON.stringify(oldValue);
+      }
+
+      if (typeof newValue === 'object') {
+        newValue = JSON.stringify(newValue);
+      }
+
+      const message = values.length === 1
+        ? `${field}:${oldValue}`
+        : `${field}:${oldValue}=>${newValue}`;
+
+      log.message.push(message);
+
+      return log;
+    }
+
+    /**
+     * 取得異動內容
+     *
+     * @return {string}
+     */
+    function getMessage() {
+      return log.message.join(', ');
+    }
+
+    /**
+     * 是否有異動內容
+     *
+     * @return {boolean}
+     */
+    function hasMessage() {
+      return log.message.length > 0;
+    }
+
+    /**
+     * 攤平
+     *
+     * @return {object}
+     */
+    function toObject() {
+      return {
+        ...log,
+        message: getMessage(),
+      };
+    }
+
+    /**
+     * 執行儲存
+     */
+    async function save() {
+      const run = async () => {
+        await request({
+          url: '/api/kafka/producer',
+          method: 'post',
+          data: {
+            topic: 'log.queue.operation_log',
+            message: JSON.stringify(toObject()),
+          },
+        });
+      };
+
+      setTimeout(run, 0);
     }
 
     return {
-      create,
+      addMessage,
+      getMessage,
+      hasMessage,
+      save,
     };
   };
 }
 
-module.exports = (app, config) => {
+module.exports = (app, { api_gateway: gwConfig }) => {
   app.use(async (ctx, next) => {
-    ctx.state.operation_logger = OperationLog(ctx);
+    ctx.state.operation_logger = OperationLog(ctx, gwConfig);
+
+    await next();
   });
-  app.context.operation_logger = OperationLog();
 };
