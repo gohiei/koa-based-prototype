@@ -7,6 +7,7 @@ module.exports = {
     log_dir: path.join(__dirname, '../logs/'),
     sequelize_model_dir: path.join(__dirname, '../src/models/'),
     controller_dir: path.join(__dirname, '../src/controller/'),
+    locale_dir: path.join(__dirname, '../src/locale/'),
   },
   listen_on: {
     // port: 3071,
@@ -54,5 +55,17 @@ module.exports = {
       timezone: 'Asia/Taipei', // for writing
       logging: false,
     },
+  },
+
+  // @see https://www.i18next.com/overview/configuration-options
+  i18next: {
+    ns: ['common', 'user'],
+    nsSeparator: '@:',
+    defaultNS: 'common',
+    fallbackLng: 'en',
+    lowerCaseLng: true,
+    preload: ['zh-tw', 'zh-cn', 'en'],
+    lookupCookie: 'lng',
+    lookupQuerystring: 'lng',
   },
 };

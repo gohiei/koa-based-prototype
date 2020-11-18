@@ -6,6 +6,7 @@ function initialApp(config) {
   const app = new Koa();
 
   require('./core/logger')(app, config);
+  require('./core/i18n')(app, config);
   require('./lib/error_logger')(app, config);
   require('./lib/access_logger')(app, config);
   require('./lib/post_logger')(app, config);
@@ -13,6 +14,7 @@ function initialApp(config) {
   require('./lib/redis')(app, config);
   require('./core/request')(app, config);
   require('./lib/operation_logger')(app, config);
+  require('./lib/execution_logger')(app, config);
   require('./controller')(app, config);
 
   return app;

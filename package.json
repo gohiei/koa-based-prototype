@@ -1,6 +1,6 @@
 {
   "name": "pineapple-manager-api-token",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "description": "",
   "main": "./src/server.js",
@@ -14,6 +14,8 @@
     "axios": "^0.21.0",
     "config": "^3.3.0",
     "generic-pool": "^3.7.1",
+    "i18next": "^19.8.3",
+    "i18next-fs-backend": "^1.0.7",
     "inet_xtoy": "^1.0.14",
     "inflected": "^2.1.0",
     "ioredis": "^4.17.3",

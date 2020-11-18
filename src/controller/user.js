@@ -5,7 +5,13 @@ function UserController(router) {
    * User
    */
   router.put('/user', async (ctx) => {
-    const { request, operation_logger: operationLogger } = ctx.state;
+    const {
+      state: {
+        request,
+        operation_logger: operationLogger,
+        execution_logger: executionLogger,
+      },
+    } = ctx;
     const domain = request.getInteger('domain');
     const username = request.getString('username');
     const enable = request.getBoolean('enable');
@@ -26,31 +32,37 @@ function UserController(router) {
     }
 
     const opLog = operationLogger('user', user.id);
+    const exLog = executionLogger('user', user.id, user.username);
 
     if (request.has('enable') && user.enable !== enable) {
-      opLog.addMessage('enable', !!enable);
+      opLog.addMessage('enable', user.enable, enable);
+      exLog.addMessage('user@:ENABLE', user.enable, enable);
       user.enable = !!enable;
     }
 
     if (request.has('bankrupt') && user.bankrupt !== bankrupt) {
-      opLog.addMessage('bankrupt', !!bankrupt);
+      opLog.addMessage('bankrupt', user.bankrupt, bankrupt);
+      exLog.addMessage('user@:BANKRUPT', user.bankrupt, bankrupt);
       user.bankrupt = !!bankrupt;
     }
 
     if (request.has('locked') && user.locked !== locked) {
-      opLog.addMessage('locked', !!locked);
+      opLog.addMessage('locked', user.locked, locked);
+      exLog.addMessage('user@:LOCKED', user.locked, locked);
       user.locked = !!locked;
     }
 
     if (request.has('tied') && user.tied !== tied) {
-      opLog.addMessage('tied', !!tied);
+      opLog.addMessage('tied', user.tied, tied);
+      exLog.addMessage('user@:TIED', user.tied, tied);
 
       user.tied = !!tied;
       user.tiedAt = tied ? DateTime.local().toString() : null;
     }
 
     if (request.has('last_login') && user.lastLogin.valueOf() !== lastLogin.valueOf()) {
-      opLog.addMessage('last_login', lastLogin);
+      opLog.addMessage('last_login', user.lastLogin, lastLogin);
+      exLog.addMessage('user@:LAST_LOGIN', user.lastLogin, lastLogin);
       user.lastLogin = lastLogin;
     }
 
@@ -58,6 +70,10 @@ function UserController(router) {
 
     if (opLog.hasMessage()) {
       opLog.save();
+    }
+
+    if (exLog.hasMessage()) {
+      exLog.save();
     }
 
     ctx.body = {
