@@ -1,5 +1,3 @@
-AMOUNT: 金额
-MEMO: 备注
 ITEM_0: ''
 ITEM_1: 会员帐号
 SYSTEM: 系統
@@ -10,40 +8,3 @@ CHANGE_TO: "{{field}}: {{old}} 调整为 {{new}}"
 IS_TRUE: 是
 IS_FALSE: 否
 EMPTY: 空
-TITLE_ZH_CN: 简中标题
-TITLE_ZH_TW: 繁中标题
-TITLE_EN: 英文标题
-TITLE_JA: 日文标题
-TITLE_VI: 越南文标题
-TITLE_KO: 韩文标题
-CONTENT_ZH_CN: '简体中文内容: 已异动'
-CONTENT_ZH_TW: '繁体中文内容: 已异动'
-CONTENT_EN: '英文内容: 已异动'
-CONTENT_JA: '日文内容: 已异动'
-CONTENT_VI: '越南文内容: 已异动'
-CONTENT_KO: '韩文内容: 已异动'
-IMAGE_ZH_CN: 简中图片
-IMAGE_ZH_TW: 繁中图片
-IMAGE_EN: 英文图片
-IMAGE_JA: 日文图片
-IMAGE_VI: 越南文图片
-IMAGE_KO: 韩文图片
-URL_ZH_CN: 简中图片连结
-URL_ZH_TW: 繁中图片连结
-URL_EN: 英文图片连结
-URL_JA: 日文图片连结
-URL_VI: 越南文图片连结
-URL_KO: 韩文图片连结
-OPEN_ZH_CN: 简中图片连结开启方式
-OPEN_ZH_TW: 繁中图片连结开启方式
-OPEN_EN: 英文图片连结开启方式
-OPEN_JA: 日文图片连结开启方式
-OPEN_VI: 越南文图片连结开启方式
-OPEN_KO: 韩文图片连结开启方式
-ROLE_MAP_1: 会员
-ROLE_MAP_2: 代理
-ROLE_MAP_3: 厅主
-ROLE_MAP_5: 客服
-LINK_OPEN_1: 直接开启
-LINK_OPEN_2: 新分页开启
-LINK_OPEN_3: 新视窗开启
