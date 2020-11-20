@@ -4,7 +4,8 @@ const util = require('util');
 const { inet_pton } = require('inet_xtoy');
 
 /**
- * @typedef {object} ExecutionLog
+ * @typedef ExecutionLog
+ * @type {object}
  * @property {function} addMessage 新增異動內容
  * @property {function} getMessage 取得異動內容
  * @property {function} hasMessage 是否有異動內容
@@ -16,9 +17,10 @@ const { inet_pton } = require('inet_xtoy');
  */
 
 /**
- * @type {ExecutionLog}
+ * @function
  * @param {KoaContext} ctx
  * @param {object} gatewayConfig
+ * @return {ExecutionLog}
  */
 function ExecutionLog(ctx, gatewayConfig) {
   const request = gatewayConfig

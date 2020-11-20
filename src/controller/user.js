@@ -1,17 +1,30 @@
 const { DateTime } = require('luxon');
 
+/**
+ * @typedef {import('koa-router')} KoaRouter
+ *
+ * @param {KoaRouter} router
+ */
 function UserController(router) {
   /**
-   * User
+   * @api PUT /user 編輯使用者
+   * @apiGroup User
+   * @apiName edit-user
+   *
+   * @apiParam {integer} domain
+   * @apiParam {string} username
+   * @apiParam {boolean} enable
+   * @apiParam {boolean} bankrupt
+   * @apiParam {boolean} locked
+   * @apiParam {boolean} tied
+   * @apiParam {string} last_login ISO8601
    */
   router.put('/user', async (ctx) => {
     const {
-      state: {
-        request,
-        operation_logger: operationLogger,
-        execution_logger: executionLogger,
-      },
-    } = ctx;
+      request,
+      operation_logger: operationLogger,
+      execution_logger: executionLogger,
+    } = ctx.state;
     const domain = request.getInteger('domain');
     const username = request.getString('username');
     const enable = request.getBoolean('enable');
@@ -83,7 +96,15 @@ function UserController(router) {
   });
 
   /**
-   * Get user list
+   * @api GET /users 取得使用者列表
+   * @apiGroup User
+   * @apiName get-users
+   *
+   * @apiParam {integer} domain
+   * @apiParam {string} username
+   * @apiParam {boolean} enable
+   * @apiParam {integer} first_result
+   * @apiParam {integer} max_results
    */
   router.get('/users', async (ctx) => {
     const { request } = ctx.state;

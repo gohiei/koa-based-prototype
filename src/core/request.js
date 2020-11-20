@@ -4,27 +4,28 @@ const qs = require('qs');
 const { DateTime } = require('luxon');
 
 /**
- * @typedef MyRequest
+ * @typedef HttpRequest
  * @type {object}
- * @property {boolean} has
- * @property {number|boolean|string} get
- * @property {string} getString
- * @property {string} str
- * @property {number} getNumber
- * @property {number} num
- * @property {integer} getInteger
- * @property {integer} getInt
- * @property {integer} int
- * @property {boolean} getBoolean
- * @property {boolean} bool
+ * @property {boolean} has 是否存在
+ * @property {number|boolean|string} get 取得值
+ * @property {string} getString 取得字串
+ * @property {string} str 同 getString
+ * @property {number} getNumber 取得數字
+ * @property {number} num 同 getNumber
+ * @property {integer} getInteger 取得整數
+ * @property {integer} getInt 同 getInteger
+ * @property {integer} int 同 getInteger
+ * @property {boolean} getBoolean 取得布林值
+ * @property {boolean} bool 同 getBoolean
+ * @property {DateTime} getDateTime 取得日期時間
+ * @property {DateTime} datetime 同 getDateTime
  */
 
 /**
  * Request 處理物件
  *
- * @typedef {import('koa').Context} KoaContext
- * @param {KoaContext} ctx
- * @return {MyRequest}
+ * @param {import('koa').Context} ctx
+ * @return {HttpRequest}
  */
 function Request(ctx) {
   const { query, form, files } = ctx.state;
@@ -110,6 +111,9 @@ function Request(ctx) {
     return DateTime.fromISO(value);
   }
 
+  /**
+   * @type {HttpRequest}
+   */
   return {
     getBoolean,
     getInteger,
@@ -142,7 +146,6 @@ module.exports = (app) => {
   });
 
   app.use(async (ctx, next) => {
-    /** @type {MyRequest} */
     const req = Request(ctx);
 
     ctx.state.request = req;

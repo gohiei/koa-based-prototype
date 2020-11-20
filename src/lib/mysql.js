@@ -78,7 +78,6 @@ function MySQL(baseDir, config) {
   return db;
 }
 
-
 /**
  * @typedef {import('koa')} Koa
  *

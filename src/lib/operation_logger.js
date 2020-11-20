@@ -15,9 +15,10 @@ const axios = require('axios');
  */
 
 /**
- * @type {OperationLog}
+ * @function
  * @param {KoaContext} ctx
  * @param {object} gatewayConfig
+ * @return {OperationLog}
  */
 function OperationLog(ctx, gatewayConfig) {
   const request = gatewayConfig
