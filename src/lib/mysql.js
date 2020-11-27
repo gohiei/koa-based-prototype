@@ -79,15 +79,12 @@ function MySQL(baseDir, config) {
 }
 
 /**
- * @typedef {import('koa')} Koa
- *
- * @param {Koa} app
+ * @param {KoaApplication} app
  * @param {object} config
  * @param {object} config.project 專案設定
  * @param {object} config.sequelize 全資料庫連線設定
- * @return {object}
  */
-module.exports = (app, { project, sequelize: mysqlConfigs }) => {
+module.exports = function MySQLInstance(app, { project, sequelize: mysqlConfigs }) {
   const baseDir = project.sequelize_model_dir;
 
   const db = {};

@@ -7,17 +7,18 @@ const { DateTime } = require('luxon');
  */
 function UserController(router) {
   /**
-   * @api PUT /user 編輯使用者
+   * @api {PUT} /user 編輯使用者
    * @apiGroup User
    * @apiName edit-user
+   * @apiVersion 0.0.1
    *
    * @apiParam {integer} domain
    * @apiParam {string} username
-   * @apiParam {boolean} enable
-   * @apiParam {boolean} bankrupt
-   * @apiParam {boolean} locked
-   * @apiParam {boolean} tied
-   * @apiParam {string} last_login ISO8601
+   * @apiParam {boolean} [enable]
+   * @apiParam {boolean} [bankrupt]
+   * @apiParam {boolean} [locked]
+   * @apiParam {boolean} [tied]
+   * @apiParam {string} [last_login] ISO8601
    */
   router.put('/user', async (ctx) => {
     const {
@@ -96,15 +97,16 @@ function UserController(router) {
   });
 
   /**
-   * @api GET /users 取得使用者列表
+   * @api {GET} /users 取得使用者列表
    * @apiGroup User
    * @apiName get-users
+   * @apiVersion 0.0.1
    *
    * @apiParam {integer} domain
-   * @apiParam {string} username
-   * @apiParam {boolean} enable
-   * @apiParam {integer} first_result
-   * @apiParam {integer} max_results
+   * @apiParam {String[]} [username]
+   * @apiParam {boolean} [enable]
+   * @apiParam {integer} [first_result=0]
+   * @apiParam {integer} [max_results=20]
    */
   router.get('/users', async (ctx) => {
     const { request } = ctx.state;

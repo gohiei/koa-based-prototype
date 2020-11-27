@@ -11,16 +11,11 @@ const axios = require('axios');
  */
 
 /**
- * @typedef {import('koa').Context} KoaContext
- */
-
-/**
- * @function
  * @param {KoaContext} ctx
  * @param {object} gatewayConfig
  * @return {OperationLog}
  */
-function OperationLog(ctx, gatewayConfig) {
+function OperationLogger(ctx, gatewayConfig) {
   const request = gatewayConfig
     ? axios.create(gatewayConfig)
     : console.log;
@@ -148,10 +143,17 @@ function OperationLog(ctx, gatewayConfig) {
   };
 }
 
-module.exports = (app, { api_gateway: gwConfig }) => {
-  app.use(async (ctx, next) => {
-    ctx.state.operation_logger = OperationLog(ctx, gwConfig);
+module.exports = OperationLogger;
+
+/**
+ * @param {object} config
+ * @param {object} config.api_gateway
+ * @return {KoaMiddleware}
+ */
+module.exports.middleware = function Logger({ api_gateway: gwConfig }) {
+  return async (ctx, next) => {
+    ctx.state.operation_logger = OperationLogger(ctx, gwConfig);
 
     await next();
-  });
+  };
 };

@@ -35,12 +35,14 @@ class App {
 
     require('./core/request')(app, config);
     require('./controller')(app, config);
+    require('./lib/apidoc')(app, config);
+    this.modules.add('apidoc');
   }
 
   /**
    * Load module
    *
-   * @param {string[]} modules Modules (mysql, redis, operation_logger, execution_logger)
+   * @param {string[]} modules Modules (mysql, redis, operation_logger, execution_logger, apidoc)
    */
   loadModules(modules = []) {
     const { app, config } = this;
@@ -56,13 +58,24 @@ class App {
     }
 
     if (modules.includes('operation_logger')) {
-      require('./lib/operation_logger')(app, config);
+      const md = require('./lib/operation_logger').middleware;
+      app.use(md(config));
+
       this.modules.add('operation_logger');
     }
 
     if (modules.includes('execution_logger')) {
-      require('./lib/execution_logger')(app, config);
+      const md = require('./lib/execution_logger').middleware;
+      app.use(md(config));
+
       this.modules.add('execution_logger');
+    }
+
+    if (modules.includes('apidoc')) {
+      const md = require('./lib/apidoc')();
+      app.use(md);
+
+      this.modules.add('apidoc');
     }
   }
 
@@ -72,13 +85,21 @@ class App {
   loadBasic() {
     const { app, config } = this;
 
-    require('./core/logger')(app, config);
-    require('./core/i18n')(app, config);
-    require('./lib/error_logger')(app, config);
-    require('./lib/access_logger')(app, config);
-    require('./lib/post_logger')(app, config);
+    const Logger = require('./core/logger');
+    app.context.logger = Logger(app, config);
 
-    this.modules.add('logger', 'i18n', 'error_logger', 'access_logger', 'post_logger');
+    const i18n = require('./core/i18n')(config);
+    app.use(i18n);
+
+    require('./lib/error_logger')(app, config);
+
+    const al = require('./lib/access_logger')(app, config);
+    app.use(al);
+
+    const pl = require('./lib/post_logger')(app, config);
+    app.use(pl);
+
+    this.modules.add('logger', 'i18n', 'error_logger', 'access_logger', 'post_logger', 'apidoc');
   }
 }
 
@@ -99,10 +120,10 @@ if (isStandalone) {
 
   app.emit('server.onCreated', server);
 
-  app.loadModules(['mysql', 'redis', 'operation_logger', 'execution_logger']);
+  app.loadModules(['mysql', 'redis', 'operation_logger', 'execution_logger', 'apidoc']);
   app.start();
 }
 
 if (!isStandalone) {
-  module.exports = (config) => new App(config);
+  module.exports = (config) => (new App(config)).getKoaApp();
 }

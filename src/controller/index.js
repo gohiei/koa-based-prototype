@@ -3,7 +3,6 @@
 const fs = require('fs');
 const path = require('path');
 const Router = require('koa-router');
-const util = require('util');
 const { DateTime } = require('luxon');
 
 const basename = path.basename(__filename);

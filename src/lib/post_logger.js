@@ -12,7 +12,7 @@ module.exports = (app) => {
     'post.log',
   );
 
-  app.use(async (ctx, next) => {
+  return async (ctx, next) => {
     const startAt = DateTime.local().toString();
     await next();
 
@@ -55,5 +55,5 @@ module.exports = (app) => {
         requestId,
       );
     }, 0);
-  });
+  };
 };

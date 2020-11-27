@@ -1,7 +1,11 @@
 const i18next = require('i18next');
 const backend = require('i18next-fs-backend');
 
-module.exports = async (app, config) => {
+/**
+ * @param {object} config
+ * @return {KoaMiddleware}
+ */
+module.exports = (config) => {
   const {
     project: { locale_dir: baseDir0 },
     i18next: i18nextConfig,
@@ -45,7 +49,7 @@ module.exports = async (app, config) => {
     return undefined;
   };
 
-  app.use(async (ctx, next) => {
+  return async (ctx, next) => {
     let lng = ctx.state.language;
 
     const i18n = i18next.cloneInstance({ initImmediate: false });
@@ -75,5 +79,5 @@ module.exports = async (app, config) => {
     };
 
     await next();
-  });
+  };
 };

@@ -1,0 +1,24 @@
+{
+  /**
+   * Application configuration section
+   * http://pm2.keymetrics.io/docs/usage/application-declaration/
+   *
+   * Rename this file to ecosystem.json
+   */
+  apps : [
+    // Provide api services to client side
+    {
+      name : "koa-based-prototype",
+      script : "./src/server.js",
+      instances : 4,
+      autorestart : true,
+      log_date_format : "YYYY-MM-DD HH:mm:ss",
+      error_file : "./logs/prod.koa_based_prototype.error.log",
+      out_file : "./logs/prod.koa_based_prototype.out.log",
+      env : {},
+      env_production : {
+        NODE_ENV: "production"
+      }
+    }
+  ]
+}

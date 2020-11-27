@@ -3,7 +3,8 @@ const { DateTime } = require('luxon');
 /**
  * Access Logger
  *
- * @param {object} app Koa's Application
+ * @param {KoaApp} app Koa's Application
+ * @return {KoaMiddleware}
  */
 module.exports = (app) => {
   const { create } = app.context.logger;
@@ -12,7 +13,7 @@ module.exports = (app) => {
     'access.log',
   );
 
-  app.use(async (ctx, next) => {
+  return async (ctx, next) => {
     const startAt = DateTime.local().toString();
     const start = new Date();
     await next();
@@ -54,5 +55,5 @@ module.exports = (app) => {
         requestId,
       );
     }, 0);
-  });
+  };
 };

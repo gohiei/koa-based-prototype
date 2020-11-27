@@ -13,16 +13,11 @@ const { inet_pton } = require('inet_xtoy');
  */
 
 /**
- * @typedef {import('koa').Context} KoaContext
- */
-
-/**
- * @function
  * @param {KoaContext} ctx
  * @param {object} gatewayConfig
  * @return {ExecutionLog}
  */
-function ExecutionLog(ctx, gatewayConfig) {
+function ExecutionLogger(ctx, gatewayConfig) {
   const request = gatewayConfig
     ? axios.create(gatewayConfig)
     : console.log;
@@ -197,10 +192,17 @@ function ExecutionLog(ctx, gatewayConfig) {
   };
 }
 
-module.exports = (app, { api_gateway: gwConfig }) => {
-  app.use(async (ctx, next) => {
-    ctx.state.execution_logger = ExecutionLog(ctx, gwConfig);
+module.exports = ExecutionLogger;
+
+/**
+ * @param {object} config
+ * @param {object} config.api_gateway
+ * @return {KoaMiddleware}
+ */
+module.exports.middleware = function Logger({ api_gateway: gwConfig }) {
+  return async (ctx, next) => {
+    ctx.state.execution_logger = ExecutionLogger(ctx, gwConfig);
 
     await next();
-  });
+  };
 };
