@@ -1,0 +1,8 @@
+{
+  "name": "koa-based-prototype",
+  "version": "0.1.0",
+  "description": "A node.js prototype based on Koa framework",
+  "title": "Api Sample",
+  "url" : "https://this.is.example.com/api/p-based/",
+  "sampleUrl": "http://127.0.0.1/api/p-based/"
+}

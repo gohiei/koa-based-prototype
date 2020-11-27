@@ -8,6 +8,8 @@ module.exports = {
     sequelize_model_dir: path.join(__dirname, '../src/models/'),
     controller_dir: path.join(__dirname, '../src/controller/'),
     locale_dir: path.join(__dirname, '../src/locale/'),
+    doc_prefix: '/docs',
+    doc_dir: path.join(__dirname, '../doc'),
   },
   listen_on: {
     // port: 3071,

@@ -35,8 +35,6 @@ class App {
 
     require('./core/request')(app, config);
     require('./controller')(app, config);
-    require('./lib/apidoc')(app, config);
-    this.modules.add('apidoc');
   }
 
   /**
@@ -72,7 +70,7 @@ class App {
     }
 
     if (modules.includes('apidoc')) {
-      const md = require('./lib/apidoc')();
+      const md = require('./lib/apidoc')(config);
       app.use(md);
 
       this.modules.add('apidoc');
