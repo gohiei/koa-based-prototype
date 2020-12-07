@@ -1,7 +1,7 @@
 {
   "name": "koa-based-prototype",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "description": "A node.js prototype based on Koa framework for production",
   "main": "./src/server.js",
   "scripts": {
